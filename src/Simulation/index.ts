@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import "../utils";
 
-interface IWHSimParams {
+export interface IWHSimParams {
   // Heater parameters
   Qmax: number; // maksymalny przepływ na wejściu [m^3/s] // 5l/min
   Qmin: number; //minimalny przepływ na wejściu [m^3/s]
@@ -18,7 +18,7 @@ interface IWHSimParams {
   time: number; // czas symulacji [s]
 }
 
-interface IWHSimResults {
+export interface IWHSimResults {
   U: number[]; // control signal [V]
   Tout: number[]; // temperature of water leaving the heater [°C]
   Qout: number[]; // flow rate of water leaving the heater [m^3/s]
@@ -34,14 +34,14 @@ export default function useIWHSim({
   Qmax = 5 / 60 / 1000, // maksymalny przepływ na wejściu [m^3/s] // 5l/min
   Qmin = Qmax * 0.2, //minimalny przepływ na wejściu [m^3/s]
   Umax = 10, // maksymalne napiecie sterujace [V]
-  Tin = 20, // temperatury wody na wejściu [°C]
+  Tin = 15, // temperatury wody na wejściu [°C]
   Tset = 38, // temperatura zadana [°C]
-  P = 2000, // moc grzałki [W]
-  V = 0.001, // 1l, objętość komory grzewczej [m^3]
-  Kp = 0.001, // wzmocnienie regulacji
-  Ti = 0.1, // czas zdwojenia
+  P = 2500, // moc grzałki [W]
+  V = 0.001, // 3l, objętość komory grzewczej [m^3]
+  Kp = 0.5, // wzmocnienie regulacji
+  Ti = 500, // czas zdwojenia
   Tp = 1, // okres próbkowania [s]
-  time = 10 * 60, // czas symulacji [s]
+  time = 5 * 60, // czas symulacji [s]
 }: Partial<IWHSimParams>): IWHSimResults {
   const p = 1000; // density of water [kg/m^3]
   const c = 4186; // heat capacity of water [J/(kg*K)]
@@ -79,6 +79,6 @@ export default function useIWHSim({
       Tout[n + 1] = Tout[n] + Tp * (tempAdded - tempLost);
     }
 
-    return { U, Tout, Qout, Time };
+    return { U, Tout, Qout: Qout.map((v) => v * 60 * 1000), Time };
   }, [Qmax, Qmin, Umax, Tin, Tset, P, V, Kp, Ti, Tp, time, p, c]);
 }
