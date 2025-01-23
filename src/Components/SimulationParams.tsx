@@ -3,11 +3,8 @@ import SliderInput from "../Inputs/SliderInput";
 
 const variables: Partial<Record<keyof IWHSimParams, number[]>> = {
   Tset: new Array(36).fill(0).map((_, i) => 19 + i), // Temperatura zadana
-  P: [1500, 2000, 2500], // Moc grzałki
+  Pmax: [2500, 5000, 7500], // Moc grzałki
   V: [1, 2, 3], // Pojemność komory grzewczej
-  Kp: [0.1, 0.5, 1, 2, 5, 10], // Wzmocnienie
-  Tp: [1, 5, 10, 20, 50], // Okres próbkowania
-  Ti: [2, 5, 10, 50, 100, 500, 1000], // Czas zdwojenia
 };
 
 type VariableName = keyof IWHSimParams;
@@ -26,20 +23,25 @@ export default function RegulationParams(props: {
           </tr>
         </thead>
         <tbody>
-          {[
-            ["Temperatura wejściowa", "20°C"],
-            ["Przepływ wejściowy", "5 l/min"],
-          ].map(([label, value]) => (
+          {(
+            [
+              ["Tin", "Temperatura wejściowa", "°C", (v: number) => v],
+              ["Q", "Przepływ", " l/min", (v: number) => v * 60 * 1000],
+            ] as const
+          ).map(([name, label, postfix, conv]) => (
             <tr key={label}>
               <td className="px-2 text-nowrap">{label}</td>
               <td className="px-2 ">
-                <div className="w-20 rounded-md text-center border-2">{value}</div>
+                <div className="w-20 rounded-md text-center border-2">
+                  {conv(props.params[name as VariableName] ?? 0)}
+                  {postfix}
+                </div>
               </td>
             </tr>
           ))}
 
           {[
-            ["P", "Moc grzałki", "W"],
+            ["Pmax", "Moc grzałki", "W"],
             ["V", "Pojemność komory grzewczej", "l"],
           ].map(([name, label, postfix]) => (
             <tr key={name}>

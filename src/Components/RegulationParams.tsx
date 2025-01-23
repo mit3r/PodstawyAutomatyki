@@ -2,12 +2,9 @@ import { IWHSimParams } from "../Simulation";
 import SliderInput from "../Inputs/SliderInput";
 
 const variables: Partial<Record<keyof IWHSimParams, number[]>> = {
-  Tset: new Array(36).fill(0).map((_, i) => 19 + i), // Temperatura zadana
-  P: [1500, 2000, 2500], // Moc grzałki
-  V: [1, 2, 3], // Pojemność komory grzewczej
-  Kp: [0.1, 0.5, 1, 2, 5, 10], // Wzmocnienie
+  Kp: [0.01, 0.1, 0.5, 1, 2, 5, 10], // Wzmocnienie
   Tp: [1, 5, 10, 20, 50], // Okres próbkowania
-  Ti: [2, 5, 10, 50, 100, 500, 1000], // Czas zdwojenia
+  Ti: [0.25, 0.5, 1, 2, 5, 10, 50, 100, 500, 1000], // Czas zdwojenia
 };
 
 type VariableName = keyof IWHSimParams;

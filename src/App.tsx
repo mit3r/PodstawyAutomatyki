@@ -40,11 +40,13 @@ Chart.defaults.scales.linear.ticks.maxRotation = 0;
 function App() {
   const [params, setParams] = useState<Partial<IWHSimParams>>({
     Tset: 36,
-    P: 2000,
+    Pmax: 7500,
     V: 1,
-    Kp: 2,
+    Kp: 0.1,
     Tp: 1,
-    Ti: 500,
+    Ti: 10, //500
+    Q: 3 / 60 / 1000,
+    Tin: 15,
   });
 
   const dispatch = <N extends keyof IWHSimParams>(name: N, value: number) =>
