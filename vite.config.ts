@@ -5,11 +5,4 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   base: "/PodstawyAutomatyki/",
-  build: {
-    rollupOptions: {
-      output: {
-        assetFileNames: "PodstawyAutomatyki/assets/[name].[hash][extname]",
-      },
-    },
-  },
 });
