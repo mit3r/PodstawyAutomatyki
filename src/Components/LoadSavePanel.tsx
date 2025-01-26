@@ -1,7 +1,8 @@
+import { SavedGraph } from "../Reducer";
 import { Colors } from "./Contants";
 
 export default function LoadSavePanel(props: {
-  graphs: number;
+  graphs: SavedGraph[];
   saveGraph: () => void;
   deleteGraph: (index: number) => void;
 }) {
@@ -15,7 +16,7 @@ export default function LoadSavePanel(props: {
         </thead>
 
         <tbody>
-          <tr>
+          {/* <tr>
             <td className="w-full flex items-center gap-x-1">
               <div
                 className="aspect-square h-4"
@@ -32,24 +33,24 @@ export default function LoadSavePanel(props: {
                 >
                   Usuń
                 </button>
-              </td> */}
-          </tr>
+              </td> 
+          </tr> */}
 
-          {Array.from({ length: props.graphs }, (_, i) => (
-            <tr key={i}>
+          {props.graphs.map((graph) => (
+            <tr key={graph.id}>
               <td className="w-full flex items-center gap-x-1">
                 <div
                   className="aspect-square h-4"
                   style={{
-                    backgroundColor: Colors[i + 1],
+                    backgroundColor: graph.color,
                   }}
                 ></div>
-                Symulacja {i + 2}
+                Symulacja {graph.id}
               </td>
               <td>
                 <button
                   className="text-white bg-slate-600 px-2 py-0.5 w-20 rounded-md"
-                  onClick={() => props.deleteGraph(i)}
+                  onClick={() => props.deleteGraph(graph.id)}
                 >
                   Usuń
                 </button>

@@ -1,16 +1,41 @@
-export interface Params {
-  power: 1500 | 2000 | 2500; // [W]
-  volume: 1 | 2 | 3; // [l]
-  time: 3 | 5; // [min]
-  setTemp: number; // [°C]
-  Kp: 0.1 | 0.5 | 1 | 2;
-  Tp: 1 | 10 | 20 | 30; // [s]
-  Ti: 100 | 500 | 1000; // [s]
+import { Colors } from "./Components/Contants";
+import { IWHSimResults } from "./Simulation";
+
+export type SavedGraph = IWHSimResults & { id: number; color: string };
+
+interface SaveAction {
+  type: "save";
+  payload: IWHSimResults;
 }
 
-export function parametersReducer<S extends Params, A extends keyof S>(
-  state: S,
-  action: { type: A; value: S[A] }
-) {
-  return { ...state, [action.type]: action.value };
+interface DeleteAction {
+  type: "delete";
+  payload: number;
+}
+
+type ActionTypes = SaveAction | DeleteAction;
+
+export function GraphsSavingReducer(state: SavedGraph[], action: ActionTypes): SavedGraph[] {
+  //
+  //
+  switch (action.type) {
+    case "save": {
+      const UnusedColors = Colors.filter((color) => !state.some((graph) => graph.color === color));
+      if (UnusedColors.length === 0) return state;
+
+      return [
+        ...state,
+        {
+          ...action.payload,
+          id: state.length == 0 ? 1 : state.last().id + 1,
+          color: UnusedColors[0],
+        },
+      ];
+    }
+    case "delete": {
+      return state.filter((graph) => graph.id !== action.payload);
+    }
+    default:
+      return state;
+  }
 }

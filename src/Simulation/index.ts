@@ -56,23 +56,18 @@ export default function useIWHSim({
     const Tout: number[] = [Tin];
     const Time: number[] = [0];
 
-    // Simulation loop
     for (let n = 0; n < Math.ceil(time / Tp); n += 1) {
       Time[n + 1] = Time[n] + Tp; // Czas symulacji
 
-      // regulator PI
       e[n] = Tset - Tout[n]; // Uchyb w tej chwili
       sum_e += e[n]; // Suma uchybów
 
       // Wyliczanie sterowania
       const calcU = Kp * (e[n] + (Tp / Ti) * sum_e);
       U[n] = Math.min(Umax, Math.max(0, calcU)); // ograniczenie sterowania
-      // 0 - zawór jest maksymalnie zamknięty; przepływa minimalna ilość wody
-      // 10 - zawór jest maksymalnie otwarty; przepływa maksymalna ilość wody
 
       // Wyliczanie następnego przepływu wody opuszczającej grzałkę
       P[n + 1] = Pmax * (U[n] / Umax);
-      // console.log((P * V) / (Qout[i] * p * c));
 
       // Wzór na obliczenie temperatury wody wychodzącej z grzałki
       const tempAdded = P[n] / (p * c * V); // energia dodana przez grzałkę
