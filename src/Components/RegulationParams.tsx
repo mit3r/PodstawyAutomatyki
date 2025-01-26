@@ -3,8 +3,8 @@ import SliderInput from "../Inputs/SliderInput";
 
 const variables: Partial<Record<keyof IWHSimParams, number[]>> = {
   Kp: [0.01, 0.1, 0.5, 1, 2, 5, 10], // Wzmocnienie
-  Tp: [1, 5, 10, 20, 50], // Okres próbkowania
   Ti: [0.25, 0.5, 1, 2, 5, 10, 50, 100, 500, 1000], // Czas zdwojenia
+  Tp: [0.125, 0.25, 0.5, 1, 5], // Okres próbkowania
 };
 
 type VariableName = keyof IWHSimParams;

@@ -38,7 +38,9 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
                   title: () => "",
                   label: (item) => ` ${item.parsed.y.toFixed(2)}°C`,
                   footer: (items) =>
-                    ` ${Math.floor(items[0].parsed.x / 60)} min ${items[0].parsed.x % 60} sec`,
+                    ` ${Math.floor(items[0].parsed.x / 60)} min ${Math.round(
+                      items[0].parsed.x % 60
+                    )} sec`,
                 },
               },
             },
@@ -48,8 +50,11 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
             labels: props.time,
             datasets: props.temps.map((d, i) => ({
               backgroundColor: Colors[i],
-              label: "Temperatura wody",
+              label: `Temperatura wody ${i + 1} [°C]`,
               data: d,
+              fill: false,
+              radius: 1,
+              // borderWidth: 0.2,
             })),
           },
         }}

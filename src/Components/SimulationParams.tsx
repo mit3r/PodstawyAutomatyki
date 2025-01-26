@@ -1,5 +1,6 @@
 import { IWHSimParams } from "../Simulation";
 import SliderInput from "../Inputs/SliderInput";
+import NoInput from "../Inputs/NoInput";
 
 const variables: Partial<Record<keyof IWHSimParams, number[]>> = {
   Tset: new Array(36).fill(0).map((_, i) => 19 + i), // Temperatura zadana
@@ -27,22 +28,21 @@ export default function RegulationParams(props: {
             [
               ["Tin", "Temperatura wejściowa", "°C", (v: number) => v],
               ["Q", "Przepływ", " l/min", (v: number) => v * 60 * 1000],
+              ["Pmax", "Moc grzałki", "W", (v: number) => v],
+              ["V", "Pojemnść komory grzewczej", "l", (v: number) => v],
             ] as const
           ).map(([name, label, postfix, conv]) => (
             <tr key={label}>
               <td className="px-2 text-nowrap">{label}</td>
               <td className="px-2 ">
-                <div className="w-20 rounded-md text-center border-2">
-                  {conv(props.params[name as VariableName] ?? 0)}
-                  {postfix}
-                </div>
+                <NoInput value={conv(props.params[name as VariableName] ?? 0)} postfix={postfix} />
               </td>
             </tr>
           ))}
 
-          {[
-            ["Pmax", "Moc grzałki", "W"],
-            ["V", "Pojemność komory grzewczej", "l"],
+          {/* {[
+            // ["Pmax", "Moc grzałki", "W"],
+            // ["V", "Pojemnść komory grzewczej", "l"],
           ].map(([name, label, postfix]) => (
             <tr key={name}>
               <td className="px-2 text-nowrap">{label}</td>
@@ -55,7 +55,7 @@ export default function RegulationParams(props: {
                 />
               </td>
             </tr>
-          ))}
+          ))} */}
 
           <tr>
             <td className="px-2 text-nowrap">Temperatura zadana</td>

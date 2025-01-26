@@ -46,7 +46,7 @@ function App() {
     Tp: 1,
     Ti: 10, //500
     Q: 3 / 60 / 1000,
-    Tin: 15,
+    Tin: 10,
   });
 
   const dispatch = <N extends keyof IWHSimParams>(name: N, value: number) =>
@@ -75,11 +75,7 @@ function App() {
 
       <div className="flex border-2 p-4 h-full">
         <WaterTempGraph temps={[data.Tout, ...graphs.map((v) => v.Tout)]} time={data.Time} />
-        <ControlSignalGraph
-          flows={[...graphs.map((v) => v.Qout), data.Qout]}
-          signals={[...graphs.map((v) => v.U), data.U]}
-          time={data.Time}
-        />
+        <ControlSignalGraph signals={[data.U, ...graphs.map((v) => v.U)]} time={data.Time} />
       </div>
     </div>
   );

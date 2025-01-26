@@ -23,7 +23,7 @@ export default function LoadSavePanel(props: {
                   backgroundColor: Colors[0],
                 }}
               ></div>
-              Symulacja
+              Symulacja 1
             </td>
             {/* <td>
                 <button
@@ -44,7 +44,7 @@ export default function LoadSavePanel(props: {
                     backgroundColor: Colors[i + 1],
                   }}
                 ></div>
-                Symulacja {i + 1}
+                Symulacja {i + 2}
               </td>
               <td>
                 <button
