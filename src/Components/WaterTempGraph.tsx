@@ -10,6 +10,10 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
             animation: false,
             scales: {
               x: {
+                title: {
+                  display: true,
+                  text: "Czas [s]",
+                },
                 display: true,
                 type: "linear",
                 min: 0,
@@ -22,6 +26,10 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
                 },
               },
               y: {
+                title: {
+                  display: true,
+                  text: "Temperatura wody [°C]",
+                },
                 max: Math.ceil(Math.max(...props.temps.flat(), 51)) + 1,
                 ticks: {
                   stepSize: 1,
@@ -50,7 +58,7 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
             labels: props.time,
             datasets: props.temps.map((d, i) => ({
               backgroundColor: Colors[i],
-              label: `Temperatura wody ${i + 1} [°C]`,
+              label: `Symulacja ${i + 1}`,
               data: d,
               fill: false,
               radius: 1,

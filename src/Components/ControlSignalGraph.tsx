@@ -10,6 +10,10 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
           options: {
             scales: {
               x: {
+                title: {
+                  display: true,
+                  text: "Czas [s]",
+                },
                 display: true,
                 type: "linear",
                 min: 0,
@@ -20,6 +24,10 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
                 },
               },
               y: {
+                title: {
+                  display: true,
+                  text: "Napięcie sterowania [V]",
+                },
                 type: "linear",
                 stack: "demo",
                 min: 0,
@@ -48,7 +56,7 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
             datasets: [
               ...props.signals.map((s, i) => ({
                 backgroundColor: ColorsDark[i],
-                label: `Sygnał sterujący ${i + 1} [V]`,
+                label: `Symulacja ${i + 1}`,
                 data: s,
                 radius: 1,
               })),

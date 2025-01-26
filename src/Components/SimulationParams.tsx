@@ -20,7 +20,6 @@ export default function RegulationParams(props: {
         <thead>
           <tr>
             <th className="text-left pb-2">Parametry symulacji</th>
-            {/* <th className="text-left pb-2">Wartość</th> */}
           </tr>
         </thead>
         <tbody>
