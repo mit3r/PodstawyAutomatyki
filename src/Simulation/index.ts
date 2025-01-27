@@ -20,7 +20,8 @@ export interface IWHSimParams {
 export interface IWHSimResults {
   U: number[]; // control signal [V]
   Tout: number[]; // temperature of water leaving the heater [°C]
-  Qout: number[]; // flow rate of water leaving the heater [m^3/s]
+  energyAdded: number[]; // energy added [J]
+  energyLost: number[]; // energy lost [J]
   Time: number[]; // time [s]
   P: number[]; // power [W]
 }
@@ -56,6 +57,9 @@ export default function useIWHSim({
     const Tout: number[] = [Tin];
     const Time: number[] = [0];
 
+    const energyAdded = [];
+    const energyLost = [];
+
     // Simulation loop
     for (let n = 0; n < Math.ceil(time / Tp); n += 1) {
       Time[n + 1] = Time[n] + Tp; // Czas symulacji
@@ -70,17 +74,21 @@ export default function useIWHSim({
       // 0 - zawór jest maksymalnie zamknięty; przepływa minimalna ilość wody
       // 10 - zawór jest maksymalnie otwarty; przepływa maksymalna ilość wody
 
-      // Wyliczanie następnego przepływu wody opuszczającej grzałkę
+      // Wyliczanie mocy grzałki
       P[n + 1] = Pmax * (U[n] / Umax);
-      // console.log((P * V) / (Qout[i] * p * c));
 
       // Wzór na obliczenie temperatury wody wychodzącej z grzałki
-      const tempAdded = P[n] / (p * c * V); // energia dodana przez grzałkę
-      const tempLost = (Q / V) * (Tout[n] - Tin); // energia stracona
+      // const energyA
+
+      const tempAdded = P[n] / (p * c * V); // tempratura dodana przez grzałkę
+      energyAdded[n] = P[n] * Tp; // energia dodana
+
+      const tempLost = (Q / V) * (Tout[n] - Tin); // temperatura stracona
+      energyLost[n] = Q * p * c * (Tout[n] - Tin) * Tp; // energia stracona
 
       Tout[n + 1] = Tout[n] + Tp * (tempAdded - tempLost);
     }
 
-    return { U, Tout, Qout: [], Time, P };
+    return { U, Tout, Time, P, energyAdded, energyLost };
   }, [Q, Umax, Tin, Tset, Pmax, V, Kp, Ti, Tp, time]);
 }

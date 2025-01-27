@@ -1,7 +1,11 @@
 import Graph from "../Graphs/Graph";
 import { ColorsDark } from "./Contants";
 
-export default function WaterTempGraph(props: { signals: number[][]; time: number[] }) {
+export default function HeatsGraph(props: {
+  heatIn: number[][];
+  heatOut: number[][];
+  time: number[];
+}) {
   return (
     <div className="w-1/2 flex justify-center">
       <Graph
@@ -26,13 +30,13 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
               y: {
                 title: {
                   display: true,
-                  text: "Napięcie sterowania [V]",
+                  text: "Energia [J]",
                 },
                 type: "linear",
                 stack: "demo",
-                min: 0,
-                max: 10,
-                ticks: { stepSize: 1 },
+                // min: 0,
+                // max: 10,
+                // ticks: { stepSize: 1 },
                 offset: true,
               },
             },
@@ -42,7 +46,8 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
                 intersect: false,
                 callbacks: {
                   title: () => "",
-                  label: (item) => ` ${item.parsed.y.toFixed(2)} [V]`,
+                  label: (item) =>
+                    `${item.datasetIndex % 2 ? "-" : ""} ${item.parsed.y.toFixed(2)} [J]`,
                   footer: (items) =>
                     ` ${Math.floor(items[0].parsed.x / 60)} min ${Math.round(
                       items[0].parsed.x % 60
@@ -54,12 +59,32 @@ export default function WaterTempGraph(props: { signals: number[][]; time: numbe
           data: {
             labels: props.time,
             datasets: [
-              ...props.signals.map((s, i) => ({
-                backgroundColor: ColorsDark[i],
-                label: `Symulacja ${i + 1}`,
-                data: s,
-                radius: 1,
-              })),
+              ...props.heatIn
+                .map((s, i) => [
+                  {
+                    backgroundColor: ColorsDark[i],
+                    label: `Symulacja ${i + 1} - energia dodana`,
+                    data: s,
+                    radius: 1,
+                  },
+                  {
+                    borderColor: ColorsDark[i],
+                    label: `Symulacja ${i + 1} - energia stracona`,
+                    data: props.heatOut[i],
+                    radius: 0,
+                    fill: false,
+                    borderDash: [5, 5],
+                  },
+                ])
+                .flat(),
+              // ...props.heatOut.map((s, i) => ({
+              //   borderColor: ColorsDark[i],
+              //   label: `Symulacja ${i + 1} - energia stracona`,
+              //   data: s,
+              //   radius: 0,
+              //   fill: false,
+              //   borderDash: [5, 5],
+              // })),
             ],
           },
         }}

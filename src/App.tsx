@@ -13,12 +13,12 @@ import {
   Tooltip,
 } from "chart.js";
 import { useState } from "react";
-import ControlSignalGraph from "./Components/ControlSignalGraph";
+import HeatsGraph from "./Components/HeatsGraph";
+import LoadSavePanel from "./Components/LoadSavePanel";
 import RegulationParams from "./Components/RegulationParams";
+import SimulationParams from "./Components/SimulationParams";
 import WaterTempGraph from "./Components/WaterTempGraph";
 import useIWHSim, { IWHSimParams, IWHSimResults } from "./Simulation";
-import SimulationParams from "./Components/SimulationParams";
-import LoadSavePanel from "./Components/LoadSavePanel";
 
 Chart.register(
   Tooltip,
@@ -57,10 +57,10 @@ function App() {
     V: (params.V ?? 0) / 1000, // liters to cubic meters
   });
 
-  const [graphs, setGraphs] = useState<IWHSimResults[]>([]);
+  const [graphs, setGraphs] = useState<(IWHSimResults & { Tset: number })[]>([]);
   const saveGraph = () => {
     if (graphs.length >= 3) return;
-    setGraphs((s) => [...s, data]);
+    setGraphs((s) => [...s, { Tset: params.Tset ?? 0, ...data }]);
   };
   const deleteGraph = (index: number) => setGraphs((s) => s.filter((_, i) => i !== index));
 
@@ -74,8 +74,16 @@ function App() {
       </div>
 
       <div className="flex border-2 p-4 h-full">
-        <WaterTempGraph temps={[data.Tout, ...graphs.map((v) => v.Tout)]} time={data.Time} />
-        <ControlSignalGraph signals={[data.U, ...graphs.map((v) => v.U)]} time={data.Time} />
+        <WaterTempGraph
+          setTemps={[params.Tset ?? 0, ...graphs.map((v) => v.Tset)]}
+          temps={[data.Tout, ...graphs.map((v) => v.Tout)]}
+          time={data.Time}
+        />
+        <HeatsGraph
+          heatIn={[data.energyAdded, ...graphs.map((v) => v.energyAdded)]}
+          heatOut={[data.energyLost, ...graphs.map((v) => v.energyLost)]}
+          time={data.Time}
+        />
       </div>
     </div>
   );

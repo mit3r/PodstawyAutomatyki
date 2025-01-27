@@ -3,7 +3,7 @@ import SliderInput from "../Inputs/SliderInput";
 import NoInput from "../Inputs/NoInput";
 
 const variables: Partial<Record<keyof IWHSimParams, number[]>> = {
-  Tset: new Array(36).fill(0).map((_, i) => 19 + i), // Temperatura zadana
+  Tset: new Array(31).fill(0).map((_, i) => 10 + i), // Temperatura zadana
   Pmax: [2500, 5000, 7500], // Moc grzałki
   V: [1, 2, 3], // Pojemność komory grzewczej
 };

@@ -1,7 +1,11 @@
 import Graph from "../Graphs/Graph";
 import { Colors } from "./Contants";
 
-export default function WaterTempGraph(props: { temps: number[][]; time: number[] }) {
+export default function WaterTempGraph(props: {
+  setTemps: number[];
+  temps: number[][];
+  time: number[];
+}) {
   return (
     <div className="w-1/2 flex justify-center">
       <Graph
@@ -56,14 +60,23 @@ export default function WaterTempGraph(props: { temps: number[][]; time: number[
           type: "line",
           data: {
             labels: props.time,
-            datasets: props.temps.map((d, i) => ({
-              backgroundColor: Colors[i],
-              label: `Symulacja ${i + 1}`,
-              data: d,
-              fill: false,
-              radius: 1,
-              // borderWidth: 0.2,
-            })),
+            datasets: [
+              ...props.temps.map((d, i) => ({
+                backgroundColor: Colors[i],
+                label: `Symulacja ${i + 1}`,
+                data: d,
+                fill: false,
+                radius: 1,
+              })),
+              ...props.setTemps.map((d, i) => ({
+                borderColor: Colors[i],
+                label: `Zadana ${i + 1}`,
+                data: props.time.map(() => d),
+                fill: false,
+                radius: 0,
+                borderDash: [5, 5],
+              })),
+            ],
           },
         }}
       />
